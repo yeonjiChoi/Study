@@ -16,7 +16,9 @@
 
   * 2개의 IP는 서로 다른 IP 번호를 갖고 있음
 
-![cors1](./Image/cors1.png)
+* console.log(location.origin)
+
+![cors1](../Image/cors1.png)
 
 * 클라이언트 서버가 로그인 서버에게 HTTP 요청을 보낼 때 **Origin이 다르다(Cross Origin)**
 * 만약 로그인 서버가 내부 통신을 통해 서버 내 데이터를 가져온다면 Same Origin이라 함(그럴 일이 드물긴함,,)
@@ -29,7 +31,7 @@
 2. HOST
 3. Port
 
-![cors2](./Image/cors2.png)
+![cors2](../Image/cors2.png)
 
 * https://yeonz.tistory:80/post
 * https://yeonz.tistory:80/post/id?page=10
