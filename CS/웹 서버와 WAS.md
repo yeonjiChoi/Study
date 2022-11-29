@@ -40,7 +40,7 @@
 
 > 인터넷 상에서 HTTP 프로토콜을 통해 사용자 컴퓨터나 장치에 애플리케이션을 수행해주는 **미들웨어**로서, 주로 **동적 서버 컨텐츠**를 수행하는 것으로 웹 서버와 구별이 되며, 주로 데이터베이스 서버와 같이 수행
 
-* WAS는 <span style="background-color : #fff5b1">**Web Server + Web Container**</span>가 합쳐진 형태로서, 웹 서버 단독으로 처리할 수 없는 <span style="background-color : #fff5b1">데이터베이스의 조회나 다양한 로직 처리가 필요한 동적 컨텐츠를 제공</span>
+* WAS는 <span style="background-color : #fff5b1">**Web Server + Web Container**</span>가 합쳐진 형태로서, 웹 서버 단독으로 처리할 수 없는 <span style="background-color : #fff5b1">데이터베이스 조회나 다양한 로직 처리가 필요한 동적 컨텐츠를 제공</span>
 * WAS는 **JSP, Servlet 구동 환경**을 제공해주기 때문에 <u>웹 컨테이너</u> 혹은 <u>서블릿 컨테이너</u>라고도 불림
   * *컨테이너란 JSP, Servlet을 실행시킬 수 있는 소프트웨어로 WAS는 JSP, Servlet 구동 환경을 제공* *(Servlet : WAS 위에서 돌아가는 자바 프로그램)*
   * *웹 컨테이너 : 웹 서버가 보낸 JSP, PHP 등의 파일을 수행한 결과를 다시 웹 서버로 보내주는 역할을 수행*
