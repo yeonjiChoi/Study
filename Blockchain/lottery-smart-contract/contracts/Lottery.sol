@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.5.0;
+pragma solidity ^0.6.0;
 
 contract Lottery {
     struct BetInfo {
@@ -24,8 +24,10 @@ contract Lottery {
 
     uint256 private _pot; // 팟머니
 
+
+    enum BlockStatus {Checkable, NotRevealed, BlockLimitPassed}
     // 이벤트 생성
-    event BET(uint256, address bettor, uint256 amount, byte challenges, uint256 answerBlockNumber);
+    event BET(uint256, address bettor, uint256 amount, bytes1 challenges, uint256 answerBlockNumber);
 
     constructor() public {
         owner = msg.sender;
@@ -61,9 +63,63 @@ contract Lottery {
         return true;
     }
 
+    // Distribute
+    // 배팅에 성공하면 돈을 돌려주고, 그렇지 않으면 배팅금을 pot에 저장
+    function distribute() public {
+        // [head] 3 4 5 6 7 8 9 10 [tail]
+        uint256 cur;
+        BetInfo memory b;
+        BlockStatus currentBlockStatus;
+
+        for(cur=_head; cur<_tail; cur++) {
+            b = _bets[cur];
+            currentBlockStatus = getBlockStatus(b.answerBlockNumber);
+
+            // Checkable : block.number > AnswerBlockNumber && block.number < BLOCK_LIMIT + AnswerBlockNumber 
+            if(currentBlockStatus == BlockStatus.Checkable) {
+                // if win, bettor gets pot
+                
+
+                // if fail, bettor's money goes pot
+
+                // if draw, refund bettor's money
+            }
+
+            // Not Revealed : 블록이 마이닝되지 않은 상태 : block.number <= AnswerBlockNumber 
+            if(currentBlockStatus == BlockStatus.NotRevealed) {
+                break;
+            }
+
+            // Block Limit Passed : 블록 제한이 지났을 때 : block.number >= AnswerBlockNumber + BLOCK_LIMIT 
+            if(currentBlockStatus == BlockStatus.BlockLimitPassed) {
+                // refund
+
+                // emit refund event
+            }
+            
+            popBet(cur);
+
+            // check the answer
+        }
+    }
+
+    function getBlockStatus(uint256 answerBlockNumber) internal view returns (BlockStatus) {
+        if(block.number > answerBlockNumber && block.number < BLOCK_LIMIT + answerBlockNumber) {
+            return BlockStatus.Checkable;
+        }  
+
+        if(block.number <= AnswerBlockNumber){
+            return BlockStatus.NotRevealed;
+        }
+
+        if(block.number >= AnswerBlockNumber + BLOCK_LIMIT) {
+            return BlockStatus.BlockLimitPassed;
+        }
+
+        return BlockStatus.BlockLimitPassed;
+    }
 
     // 검증 함수 - 결과 값을 검증
-
     // _bets에 있는 정보를 가져오는 함수
     function getBetInfo(uint256 index) public view returns (uint256 answerBlockNumber, address bettor, bytes1 challenges) {
         BetInfo memory b = _bets[index];
@@ -76,7 +132,7 @@ contract Lottery {
     function pushBet(bytes1 challenges) internal returns (bool) {
         BetInfo memory b;
         b.bettor = msg.sender;
-        b.answerBlockNumber = block.number;
+        b.answerBlockNumber = block.number + BET_BLOCK_INTERVAL;
         b.challenges = challenges;
 
         _bets[_tail] = b;
